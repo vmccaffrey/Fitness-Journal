@@ -10,21 +10,25 @@ public class Post {
 	private String date;
 	private String time;
 	private String message;
+	private boolean originalPost;
+
+	public void setUsername(String n) {username = n;}
+	public void setDate(String d) {date = d;}
+	public void setTime(String t) {time = t;}
+	public void setMessage(String m) {message = m;}
+	public void setOriginalPost(boolean b) {originalPost = b;}
 	
-	public setUsername(String n) {username = n;}
-	public setDate(String d) {date = d;}
-	public setTime(String t) {time = t;}
-	public setMessage(String m) {message = m;}
+	public String getUsername() {return username;}
+	public String getDate() {return date;}
+	public String getTime() {return time;}
+	public String getMessage() {return message;}
+	public boolean getOriginalPost() {return originalPost;}
 	
-	public getUsername() {return username;}
-	public getDate() {return date;}
-	public getTime() {return time;}
-	public getMessage() {return message;}
-	
-	public Post(n, d, t, m) {
+	public Post(String n, String d, String t, String m, boolean b) {
 		setUsername(n);
 		setDate(d);
 		setTime(t);
 		setMessage(m);
+		setOriginalPost(b);
 	}
 }

@@ -11,10 +11,5 @@ Contains all user and forum information
 */
 
 public class Server {
-	
-	
-	
-	
-	
-	
+
 }
