@@ -1,6 +1,6 @@
 /*
 The GUI
-	-allows users to log into the forum.server and view the forum
+	-allows users to log into the forum server and view the forum
 		-stores user log in for the session
 		-can view a scrollable list of user created threads
 			-each thread shows as a title, which indicates the topic
@@ -10,8 +10,8 @@ The GUI
 				-over a certain limit, the list of posts are divided over multiple pages
 					-navigate to next/previous page with two buttons, or jump to a specific page with a textfield and button
 				-users can create a new post in a thread, which is appended to the end of the list
-
-	
+		-return to the main forums with a button
+		-refresh the current page with a button
 */
 package forum.ui;
 

@@ -1,6 +1,7 @@
 /*
 A series of threads
 	-store Thread objects
+	-can create new threads and posts
 */
 package forum;
 
