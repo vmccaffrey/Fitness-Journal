@@ -29,7 +29,7 @@ import java.sql.SQLException;
 
 public class Calendarone extends JPanel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	static JLabel lblMonth, lblYear, lblPushups, lblSitups, lblRunning, lblNewLabel, lblNewLabel_2, lblNewLabel_3;
@@ -70,7 +70,7 @@ public class Calendarone extends JPanel {
 		btnPrev = new JButton ("<<");
 		btnNext = new JButton (">>");
 		mtblCalendar = new DefaultTableModel(){/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -78,16 +78,16 @@ public class Calendarone extends JPanel {
 		tblCalendar = new JTable(mtblCalendar);
 		stblCalendar = new JScrollPane(tblCalendar);
 		pnlCalendar = new JPanel(null);
-		
+
 
 		//Set border
 		pnlCalendar.setBorder(BorderFactory.createTitledBorder(" "));
-		
+
 		//Register action listeners
 		btnPrev.addActionListener(new btnPrev_Action());
 		btnNext.addActionListener(new btnNext_Action());
 		cmbYear.addActionListener(new cmbYear_Action());
-		
+
 		//Add controls to pane
 //		pane.add(pnlCalendar);
 		add(pnlCalendar);
@@ -97,7 +97,7 @@ public class Calendarone extends JPanel {
 		pnlCalendar.add(btnPrev);
 		pnlCalendar.add(btnNext);
 		pnlCalendar.add(stblCalendar);
-		
+
 		//Set bounds
 		pnlCalendar.setBounds(69, 11, 441, 301);
 		lblMonth.setBounds(70, 25, 100, 25);
@@ -107,11 +107,11 @@ public class Calendarone extends JPanel {
 		btnNext.setBounds(260, 25, 50, 25);
 		stblCalendar.setBounds(10, 61, 345, 225);
 		btnResults.setBounds(260, 25, 50, 25);
-		
+
 		//Make frame visible
 //		frmMain.setResizable(false);
 //		frmMain.setVisible(true);
-		
+
 		//Get real month/year
 		GregorianCalendar cal = new GregorianCalendar(); //Create calendar
 		realDay = cal.get(GregorianCalendar.DAY_OF_MONTH); //Get day
@@ -119,13 +119,13 @@ public class Calendarone extends JPanel {
 		realYear = cal.get(GregorianCalendar.YEAR); //Get year
 		currentMonth = realMonth; //Match month and year
 		currentYear = realYear;
-		
+
 		//Add headers
 		String[] headers = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}; //All headers
 		for (int i=0; i<7; i++){
 			mtblCalendar.addColumn(headers[i]);
 		}
-		
+
 		tblCalendar.getParent().setBackground(tblCalendar.getBackground()); //Set background
 
 		//No resize/reorder
@@ -139,73 +139,73 @@ public class Calendarone extends JPanel {
 
 		//Set row/column count
 		tblCalendar.setRowHeight(38);
-		
+
 		JPanel pnlGetData = new JPanel();
 		pnlGetData.setBounds(51, 353, 459, 38);
 		add(pnlGetData);
-		
+
 		JLabel lblNewLabel = new JLabel("Pick Date:");
 		pnlGetData.add(lblNewLabel);
-		
+
 		JDateChooser dateChooser = new JDateChooser();
 		pnlGetData.add(dateChooser);
-		
+
 		JButton btnResults = new JButton("See log");
 		pnlGetData.add(btnResults);
-		
+
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) panel.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		panel.setBounds(178, 402, 151, 29);
 		add(panel);
-		
+
 		lblNewLabel_1 = new JLabel("Pushups:");
 		panel.add(lblNewLabel_1);
-		
+
 		JLabel lblPushups = new JLabel("");
 		panel.add(lblPushups);
 		lblPushups.setHorizontalAlignment(SwingConstants.TRAILING);
-		
+
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		panel_1.setBounds(188, 442, 151, 24);
 		add(panel_1);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Situps:");
 		panel_1.add(lblNewLabel_2);
-		
+
 		JLabel lblSitups = new JLabel("");
 		panel_1.add(lblSitups);
-		
+
 		JPanel panel_2 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panel_2.setBounds(178, 479, 151, 29);
 		add(panel_2);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Running:");
 		panel_2.add(lblNewLabel_3);
-		
+
 		JLabel lblRunning = new JLabel("");
 		panel_2.add(lblRunning);
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
-		
+
 		//Populate table
 		for (int i=realYear-100; i<=realYear+100; i++){
 			cmbYear.addItem(String.valueOf(i));
 		}
-		
+
 		//Refresh calendar
 		refreshCalendar (realMonth, realYear); //Refresh calendar
 	}
-	
+
 	public static void refreshCalendar(int month, int year){
 		//Variables
 		String[] months =  {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 		int nod, som; //Number Of Days, Start Of Month
-			
+
 		//Allow/disallow buttons
 		btnPrev.setEnabled(true);
 		btnNext.setEnabled(true);
@@ -215,19 +215,19 @@ public class Calendarone extends JPanel {
 		lblMonth.setText(months[month]); //Refresh the month label (at the top)
 		lblMonth.setBounds(160-lblMonth.getPreferredSize().width/2, 25, 180, 25); //Re-align label with calendar
 		cmbYear.setSelectedItem(String.valueOf(year)); //Select the correct year in the combo box
-		
+
 		//Clear table
 		for (int i=0; i<6; i++){
 			for (int j=0; j<7; j++){
 				mtblCalendar.setValueAt(null, i, j);
 			}
 		}
-		
+
 		//Get first day of month and number of days
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
 		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		som = cal.get(GregorianCalendar.DAY_OF_WEEK);
-		
+
 		//Draw calendar
 		for (int i=1; i<=nod; i++){
 			int row = new Integer((i+som-2)/7);
@@ -241,7 +241,7 @@ public class Calendarone extends JPanel {
 
 	static class tblCalendarRenderer extends DefaultTableCellRenderer{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -260,7 +260,7 @@ public class Calendarone extends JPanel {
 			}
 			setBorder(null);
 			setForeground(Color.black);
-			return this;  
+			return this;
 		}
 	}
 
@@ -317,9 +317,9 @@ public class Calendarone extends JPanel {
 
 			try(Connection conn = this.connect();
                 PreparedStatement pstmt=conn.prepareStatement(getNumbers)){
-               
-                ResultSet rs = pstmt.executeQuery();        
-                
+
+                ResultSet rs = pstmt.executeQuery();
+
                 // loop through the result set
                 while(rs.next()) {
                     lblPushups.setText(""+rs.getString("Pushups"));

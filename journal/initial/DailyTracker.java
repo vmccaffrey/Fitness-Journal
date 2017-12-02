@@ -23,15 +23,17 @@ public class DailyTracker extends JPanel implements Runnable {
 	private static final String defaultTime = "00:00:00";
 
 	private Thread thread;
-	private int hourCounter = 0;
-	private int minuteCounter = 0;
-	private int secondCounter = 0;
-	private String string = "";
-	private String minuteString = "";
-	private String distanceString = "";
-	private String timeString = "";
-	private	int counter = 0;
-	private	int counter2 = 0;
+	private int stopwatchHourCounter = 0;
+	private int stopwatchMinuteCounter = 0;
+	private int stopwatchSecondCounter = 0;
+	private int timerHourCounter = 0;
+	private int timerMinuteCounter = 0;
+	private int timerSecondCounter = 0;
+
+	private String stopwatchTimeString = "";
+	private String timerTimeString = "";
+	private	boolean threadStarted = false;
+	private	int state = 0;
 
 	/**
 	 * Creates new form DailyTracker
@@ -41,59 +43,124 @@ public class DailyTracker extends JPanel implements Runnable {
 		thread = new Thread(this);
 	}
 
-	public void reset(){
-		hourCounter = 0;
-		minuteCounter = 0;
-		secondCounter = 0;
-		timeString = defaultTime;
-//		distanceString ="";
-		display();
+	public void resetStopwatch(){
+		stopwatchHourCounter = 0;
+		stopwatchMinuteCounter = 0;
+		stopwatchSecondCounter = 0;
+
+		stopwatchTimeString = defaultTime;
+
+		displayStopwatch();
 	}
 
-	public void display(){
-		stopWatchLabel.setText(timeString);
+	public void resetTimer() {
+		timerHourCounter = 0;
+		timerMinuteCounter = 0;
+		timerSecondCounter = 0;
+
+		timerTimeString = defaultTime;
+
+		displayTimer();
 	}
 
-	public void setTimeCounter(){
-		timeString ="";
-		if (hourCounter <10) {
-			timeString ="0"+ hourCounter;
+	public void displayStopwatch(){
+		stopwatchLabel.setText(stopwatchTimeString);
+	}
+
+	public void displayTimer() {
+		timerLabel.setText(timerTimeString);
+	}
+	
+	public void setStopwatchCounter(){
+		stopwatchTimeString ="";
+		if (stopwatchHourCounter <10) {
+			stopwatchTimeString ="0"+ stopwatchHourCounter;
 		}
 		else {
-			timeString =""+ hourCounter;
+			stopwatchTimeString =""+ stopwatchHourCounter;
 		}
 
-		if (minuteCounter <10) {
-			timeString +=":0"+ minuteCounter;
+		if (stopwatchMinuteCounter <10) {
+			stopwatchTimeString +=":0"+ stopwatchMinuteCounter;
 		}
 		else {
-			timeString +=":"+ minuteCounter;
+			stopwatchTimeString +=":"+ stopwatchMinuteCounter;
 		}
 
-		if (secondCounter <10) {
-			timeString +=":0"+ secondCounter;
+		if (stopwatchSecondCounter <10) {
+			stopwatchTimeString +=":0"+ stopwatchSecondCounter;
 		}
 		else {
-			timeString +=":"+ secondCounter;
+			stopwatchTimeString +=":"+ stopwatchSecondCounter;
+		}
+	}
+
+	public void setTimerCounter(){
+		timerTimeString ="";
+		if (timerHourCounter <10) {
+			timerTimeString ="0"+ timerHourCounter;
+		}
+		else {
+			timerTimeString =""+ timerHourCounter;
+		}
+
+		if (timerMinuteCounter <10) {
+			timerTimeString +=":0"+ timerMinuteCounter;
+		}
+		else {
+			timerTimeString +=":"+ timerMinuteCounter;
+		}
+
+		if (timerSecondCounter <10) {
+			timerTimeString +=":0"+ timerSecondCounter;
+		}
+		else {
+			timerTimeString +=":"+ timerSecondCounter;
 		}
 	}
 
 
 	public void run() {
-		int fast = 30;
+		int seconds = 1;
 		while(true) {
 			try {
-				secondCounter += fast;
-				if (secondCounter >59) {
-					secondCounter =0;
-					minuteCounter += fast;
+				if(state == 0) {
+					stopwatchSecondCounter += seconds;
+					if (stopwatchSecondCounter > 59) {
+						stopwatchSecondCounter = 0;
+						stopwatchMinuteCounter += seconds;
+					}
+					if (stopwatchMinuteCounter > 59) {
+						stopwatchMinuteCounter = 0;
+						stopwatchHourCounter += seconds;
+					}
+					setStopwatchCounter();
+					displayStopwatch();
 				}
-				if (minuteCounter >59) {
-					minuteCounter =0;
-					hourCounter += fast;
+				else {
+					if(timerSecondCounter > 0) {
+						timerSecondCounter -= seconds;
+					}
+					else {
+						if(timerMinuteCounter > 0){
+							timerMinuteCounter -= seconds;
+							timerSecondCounter = 60 - seconds;
+						}
+						else {
+							if(timerHourCounter > 0) {
+								timerHourCounter -= seconds;
+								timerMinuteCounter = 60 - seconds;
+								timerSecondCounter = 60 - seconds;
+							}
+							else {
+								thread.suspend();
+								timerStartButton.setText(start);
+							}
+						}
+					}
+					setTimerCounter();
+					displayTimer();
 				}
-				setTimeCounter();
-				display();
 				Thread.sleep(1000);
 			} catch (Exception e){
 
@@ -133,9 +200,9 @@ public class DailyTracker extends JPanel implements Runnable {
 		situpLabel = new javax.swing.JLabel();
 		distanceLabel = new javax.swing.JLabel();
 
-		stopWatchLabel = new javax.swing.JLabel();
-		stopWatchStartButton = new javax.swing.JButton();
-		stopWatchResetButton = new javax.swing.JButton();
+		stopwatchLabel = new javax.swing.JLabel();
+		stopwatchStartButton = new javax.swing.JButton();
+		stopwatchResetButton = new javax.swing.JButton();
 
 		timerLabel = new javax.swing.JLabel();
 		timerInputField = new javax.swing.JTextField();
@@ -145,20 +212,20 @@ public class DailyTracker extends JPanel implements Runnable {
 		submitButton = new javax.swing.JButton();
 		viewDatabaseButton = new javax.swing.JButton();
 
-		stopWatchLabel.setFont(new java.awt.Font("Digital-7 Mono", Font.BOLD, 48)); // NOI18N
-		stopWatchLabel.setText(defaultTime);
+		stopwatchLabel.setFont(new java.awt.Font("Digital-7 Mono", Font.BOLD, 48)); // NOI18N
+		stopwatchLabel.setText(defaultTime);
 
-		stopWatchStartButton.setText(start);
-		stopWatchStartButton.addActionListener(new java.awt.event.ActionListener() {
+		stopwatchStartButton.setText(start);
+		stopwatchStartButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				stopWatchStartActionPerformed(evt);
+				stopwatchStartActionPerformed(evt);
 			}
 		});
 
-		stopWatchResetButton.setText("Reset");
-		stopWatchResetButton.addActionListener(new java.awt.event.ActionListener() {
+		stopwatchResetButton.setText("Reset");
+		stopwatchResetButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				stopWatchResetActionPerformed(evt);
+				stopwatchResetActionPerformed(evt);
 			}
 		});
 
@@ -274,11 +341,11 @@ public class DailyTracker extends JPanel implements Runnable {
 								.addGap(18, 18, 18)
 								.addComponent(pushupLabel))
 							.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-								.addComponent(stopWatchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(stopwatchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addGroup(jPanel1Layout.createSequentialGroup()
-									.addComponent(stopWatchStartButton)
+									.addComponent(stopwatchStartButton)
 									.addGap(97, 97, 97)
-									.addComponent(stopWatchResetButton))
+									.addComponent(stopwatchResetButton))
 								.addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
 									.addGap(25, 25, 25)
 									.addComponent(submitButton)
@@ -333,14 +400,14 @@ public class DailyTracker extends JPanel implements Runnable {
 					.addComponent(distanceLabel))
 				.addGap(27, 27, 27)
 				.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-					.addComponent(stopWatchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+					.addComponent(stopwatchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
 					.addComponent(timerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
 				.addGap(18, 18, 18)
 				.addComponent(timerInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 				.addGap(15, 15, 15)
 				.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-					.addComponent(stopWatchStartButton)
-					.addComponent(stopWatchResetButton)
+					.addComponent(stopwatchStartButton)
+					.addComponent(stopwatchResetButton)
 					.addComponent(timerStartButton)
 					.addComponent(timerResetButton))
 				.addGap(40, 40, 40)
@@ -398,12 +465,17 @@ public class DailyTracker extends JPanel implements Runnable {
 		}
 	}
 
-	private void stopWatchStartActionPerformed(java.awt.event.ActionEvent evt) {
-		if (stopWatchStartButton.getText().equals(start)) {
-			stopWatchStartButton.setText(stop);
+	private void stopwatchStartActionPerformed(java.awt.event.ActionEvent evt) {
+		if (stopwatchStartButton.getText().equals(start)) {
+			stopwatchStartButton.setText(stop);
 
-			if (counter == 0) {
-				counter++;
+			state = 0;
+			stopwatchResetButton.setEnabled(false);
+			timerStartButton.setEnabled(false);
+			timerResetButton.setEnabled(false);
+
+			if (!threadStarted) {
+				threadStarted = true;
 				thread.start();
 			}
 			else {
@@ -411,29 +483,64 @@ public class DailyTracker extends JPanel implements Runnable {
 			}
 		}
 		else {
-			stopWatchStartButton.setText(start);
+			stopwatchResetButton.setEnabled(true);
+			timerStartButton.setEnabled(true);
+			timerResetButton.setEnabled(true);
+
+			stopwatchStartButton.setText(start);
+
 			thread.suspend();
 		}
 	}
 
-	private void stopWatchResetActionPerformed(java.awt.event.ActionEvent evt) {
-		reset();
-		thread.suspend();
-		stopWatchStartButton.setText("Start");
-
+	private void stopwatchResetActionPerformed(java.awt.event.ActionEvent evt) {
+		resetStopwatch();
+//		thread.suspend();
+		stopwatchStartButton.setText(start);
 	}
 
 	private void timerStartActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		if (timerStartButton.getText().equals(start)) {
+			timerStartButton.setText(stop);
 
+			state = 1;
+			timerResetButton.setEnabled(false);
+			stopwatchStartButton.setEnabled(false);
+			stopwatchResetButton.setEnabled(false);
+
+			String[] timer = timerInputField.getText().split(":");
+
+			timerHourCounter = Integer.parseInt(timer[0]);
+			timerMinuteCounter = Integer.parseInt(timer[1]);
+			timerSecondCounter = Integer.parseInt(timer[2]);
+			displayTimer();
+
+			if (!threadStarted) {
+				threadStarted = true;
+				thread.start();
+			}
+			else {
+				thread.resume();
+			}
+		}
+		else {
+			timerResetButton.setEnabled(true);
+			stopwatchStartButton.setEnabled(true);
+			stopwatchResetButton.setEnabled(true);
+
+			timerStartButton.setText(start);
+			thread.suspend();
+		}
 	}
 
 	private void timerResetActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		resetTimer();
+//		thread.suspend();
+		timerStartButton.setText(start);
 	}
 
 	private void submitResultsActionPerformed(java.awt.event.ActionEvent evt) {
-		String[] runTime = stopWatchLabel.getText().split(":");
+		String[] runTime = stopwatchLabel.getText().split(":");
 		float time = (Float.parseFloat(runTime[0]) * 60) + (Float.parseFloat(runTime[1]) * 1) + (Float.parseFloat(runTime[2]) / 60);
 		insert(getFormattedDate(),
 				Integer.parseInt(pushupLabel.getText()),
@@ -470,12 +577,12 @@ public class DailyTracker extends JPanel implements Runnable {
 	private javax.swing.JLabel situpLabel;
 	private javax.swing.JLabel distanceLabel;
 
-	private javax.swing.JLabel stopWatchLabel;
+	private javax.swing.JLabel stopwatchLabel;
 	private javax.swing.JLabel timerLabel;
 	private javax.swing.JTextField timerInputField;
 
-	private javax.swing.JButton stopWatchStartButton;
-	private javax.swing.JButton stopWatchResetButton;
+	private javax.swing.JButton stopwatchStartButton;
+	private javax.swing.JButton stopwatchResetButton;
 	private javax.swing.JButton timerStartButton;
 	private javax.swing.JButton timerResetButton;
 

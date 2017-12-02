@@ -14,8 +14,6 @@ public class Calendar extends JPanel {
 	static JButton btnPrev, btnNext;
 	static JTable tblCalendar;
 	static JComboBox cmbYear;
-//	static JFrame frmMain;
-//	static Container pane;
 	static DefaultTableModel mtblCalendar; //Table model
 	static JScrollPane stblCalendar; //The scrollpane
 	static JPanel pnlCalendar;

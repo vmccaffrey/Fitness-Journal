@@ -36,7 +36,7 @@ public class Main {
 		Calendar calendarTab = new Calendar();
 		UIClientMain forumTab = new UIClientMain();
 
-		tabbedPane.add("Day One", dayOneTab);
+		tabbedPane.add("Recommendation", dayOneTab);
 		tabbedPane.add("Daily Tracker", dailyTrackerTab);
 		tabbedPane.add("Calendar", calendarTab);
 		tabbedPane.add("Forum", forumTab);
